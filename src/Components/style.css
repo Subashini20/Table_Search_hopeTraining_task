@@ -1,0 +1,36 @@
+table {
+    width: 100%;
+    margin-top: 40px;
+    text-align: center !important;
+  }
+  .App {
+    text-align: left !important;
+  }
+  .form {
+    display: inline-flex;
+    margin-top:50px;
+    text-align: left;
+    
+  }
+  h1 {
+    text-align: center !important;
+  }
+  .inputfield{
+    margin-right: 10px;
+  }
+  table , td, th {
+    border: 1px solid black;
+    
+  }
+  td, th {
+    padding: 10px;
+    width: 100px;
+  }
+  .search {
+    margin-top: 20px !important;
+    text-align: left !important;
+  }
+  .search input {
+    padding: 10px !important;
+    width: 300px;
+  }
