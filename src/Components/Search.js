@@ -1,155 +1,164 @@
-import React, { Component } from 'react';
-import {Table} from 'react-bootstrap'
-import './style.css';
-import {Data} from './tabledata.js'
-
+import React, { Component } from "react";
+import "./style.css";
+import { Data } from "./tabledata.js";
 
 class Search extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      Id: '',
+      Id: "",
       Name: "",
       Dept: "",
       Degree: "",
       Doj: "",
-      details:Data,
-      searchlist:[],
-      searchdata:""  
-    }
+      details: Data,
+      searchlist: [],
+      searchdata: ""
+    };
   }
-  addRow = () => {
+  handleAddRow = () => {
+    const { Id, Name, Dept, Degree, Doj } = this.state;
 
-    if(this.state.Id !=="" && this.state.Name !=="" && this.state.Degree !="" && this.state.Dept !="" && this.state.Doj !="")
-    {
- 
-      this.state.details.push({
-        Id:this.state.Id,
-        Name:this.state.Name,
-        Dept:this.state.Dept,
-        Degree:this.state.Degree,
-        Doj:this.state.Doj,
-      })
+    if (Id && Name && Dept && Degree && Doj) {
+      const newDetails = [
+        ...this.state.details,
+        { Id, Name, Dept, Degree, Doj }
+      ];
       this.setState({
-        details:this.state.details,
-        Name:"",
-        Doj:"",
-        Id:"",
-        Dept:"",
-        Degree:"",
-      })
+        details: newDetails,
+        Id: "",
+        Name: "",
+        Dept: "",
+        Degree: "",
+        Doj: ""
+      });
+    } else {
+      alert("Please enter all the details.");
     }
-    else{
-      alert('Enter all the details')
-    }
-  }
-  Onsearch=(e)=>{
-  let searchitem=e.target.value;
-  let {searchlist}=this.state
-  console.log(e.target.value) 
-  if(e.target.value !="")
-  {
-    searchlist=this.state.details.filter(item=>
-              item.Name != null && item.Name.toLowerCase().includes(searchitem) || 
-              item.Degree != null && item.Degree.toLowerCase().includes(searchitem) ||  
-              item.Dept != null && item.Dept.toLowerCase().toString().toLowerCase().includes(searchitem)
-            )
-            this.setState({
-              searchdata:e.target.value,
-              searchlist:searchlist    
-            }) 
-  }
-  else{
+  };
+  onSearch = (event) => {
+    const searchItem = event.target.value.toLowerCase();
+    const searchList = this.state.details.filter(
+      (item) =>
+        item.Name?.toLowerCase().includes(searchItem) ||
+        item.Degree?.toLowerCase().includes(searchItem) ||
+        item.Dept?.toLowerCase().includes(searchItem)
+    );
     this.setState({
-      searchdata:'',
-      searchlist:[],
-      details:Data,
-    })  
-  }
-     }
-  handlechange = (e) => {    
-    console.log(e.target.value)
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
-  
+      searchdata: searchItem,
+      searchlist: searchList // change this to searchList (uppercase "L")
+    });
+  };
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
   render() {
-    console.log(Data)
+    const { details, searchdata, searchlist } = this.state;
+    const filteredDetails = searchdata
+      ? searchlist.length
+        ? searchlist
+        : []
+      : details;
+
     return (
       <>
-      <h1>Table Filter</h1>
-        <div className='form'> 
-          <div className='inputfield'>
-          
-            <input type="text" name="Id" value={this.state.Id} placeholder="Enter id" onChange={(e) => { this.handlechange(e) }}/>
+        <h1>Table Filter</h1>
+        <div className="form">
+          <div className="inputfield">
+            <input
+              type="text"
+              name="Id"
+              value={this.state.Id}
+              placeholder="Enter id"
+              onChange={this.handleInputChange}
+            />
           </div>
-          <div className='inputfield'>
-           
-            <input type="text" name="Name" value={this.state.Name}  placeholder="Enter Name" onChange={(e) => { this.handlechange(e) }} />
+          <div className="inputfield">
+            <input
+              type="text"
+              name="Name"
+              value={this.state.Name}
+              placeholder="Enter Name"
+              onChange={this.handleInputChange}
+            />
           </div>
-          <div className='inputfield'>
-           
-            <input type="text" name="Dept" value={this.state.Dept}  placeholder="Enter Department" onChange={(e) => { this.handlechange(e) }}/>
+          <div className="inputfield">
+            <input
+              type="text"
+              name="Dept"
+              value={this.state.Dept}
+              placeholder="Enter Department"
+              onChange={this.handleInputChange}
+            />
           </div>
-          <div className='inputfield'>
-          
-            <input type="text" name="Degree" value={this.state.Degree}  placeholder="Enter Degree" onChange={(e) => { this.handlechange(e) }}/>
+          <div className="inputfield">
+            <input
+              type="text"
+              name="Degree"
+              value={this.state.Degree}
+              placeholder="Enter Degree"
+              onChange={this.handleInputChange}
+            />
           </div>
-          <div className='inputfield'>
-           
-            <input type="date" name="Doj" value={this.state.Doj}  placeholder="Enter Doj" onChange={(e) => { this.handlechange(e) }}/>
+          <div className="inputfield">
+            <input
+              type="date"
+              name="Doj"
+              value={this.state.Doj}
+              placeholder="Enter Doj"
+              onChange={this.handleInputChange}
+            />
           </div>
-          <button type="submit" onClick={this.addRow}>Add</button>
+          <button type="submit" onClick={this.handleAddRow}>
+            Add
+          </button>
         </div>
 
-        <div className='search'>         
-          <input type="text" placeholder='Search here...' name="searchdata" value={this.state.searchdata} onChange={(e)=>{this.Onsearch(e)}}></input>
+        <div className="search">
+          <input
+            type="text"
+            placeholder="Search here..."
+            name="searchdata"
+            value={this.state.searchData}
+            onChange={this.onSearch}
+          />
         </div>
-          <table>
-            <thead>
-              <tr>               
-                <th >id</th>
-                <th >Name</th>
-                <th>Department</th>
-                <th>Degree</th>
-                <th >DOJ</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-            {this.state.details.filter((a)=>{ return this.state.searchdata =="" ? a :  a.Name != null && a.Name.toLowerCase().includes(this.state.searchdata) || a.Degree != null && a.Degree.toLowerCase().includes(this.state.searchdata) ||  a.Dept != null && a.Dept.toString().toLowerCase().includes(this.state.searchdata)}).map((item)=>{
-                  return (
-                    <tr key={item.Id}>                     
-                    <td>{item.Id}</td>
-                    <td>{item.Name}</td>
-                    <td>{item.Dept}</td>
-                    <td>{item.Degree}</td>
-                    <td>{item.Doj}</td>
-                    </tr>
-                  )
-                 
-
-                })}
-               
-              
-            </tbody>
-          </table>
-        <footer style={{textAlign: 'left', marginTop: "20px"}}>
-          <h3>Total no of rows:<span style={{fontWeight: "400", fontSize: "16px"}}> {this.state.searchdata == ""?this.state.details.length:
-          this.state.searchlist.length} of {this.state.details.length}</span></h3> 
-         
-
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Degree</th>
+              <th>DOJ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredDetails.map((item) => {
+              return (
+                <tr key={item.Id}>
+                  <td>{item.Id}</td>
+                  <td>{item.Name}</td>
+                  <td>{item.Dept}</td>
+                  <td>{item.Degree}</td>
+                  <td>{item.Doj}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <footer style={{ textAlign: "left", marginTop: "20px" }}>
+          <h3>
+            Total no of rows:{" "}
+            <span style={{ fontWeight: "400", fontSize: "16px" }}>
+              {filteredDetails.length} of {details.length}
+            </span>
+          </h3>
         </footer>
-       
-
       </>
-
-    )
+    );
   }
-
-
-
 }
-export default Search
+export default Search;
